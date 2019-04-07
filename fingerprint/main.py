@@ -10,6 +10,9 @@ if __name__ == '__main__':
     sep = ","
     df = pd.read_csv(input_file, sep="\n", engine="python", error_bad_lines=False, quoting=3)
 
+    df = df.ix[:1600000]
+    #df = df.ix[1600000:]
+
     print("Running Fingerprint")
     series = df.ix[:, 0].map(get_fingerprint).sort_values()
     series.sort_values(ascending=True, inplace=True)
