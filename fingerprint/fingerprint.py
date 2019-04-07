@@ -3,7 +3,9 @@
 import re, string
 from unidecode import unidecode
 
-PUNCTUATION = re.compile('[%s]' % re.escape(string.punctuation))
+ILLEGAL_CHARS = string.punctuation.replace(",", "") # Punctuation except ","
+
+#PUNCTUATION = re.compile('[%s]' % re.escape(ILLEGAL_CHARS))
 
 class Fingerprinter(object):
     '''
@@ -14,7 +16,7 @@ class Fingerprinter(object):
     def __init__(self, string, sorted=False):
         self.blacklist = set(line.strip() for line in open('blacklist.txt'))
         self.sorted = sorted
-        string = str(string)
+        string = str(string).lower()
         self.string = self._preprocess(string)
 
     def _preprocess(self, string):
@@ -22,16 +24,25 @@ class Fingerprinter(object):
         Strip leading and trailing whitespace, lowercase the string, remove all punctuation,
         in that order.
         '''
-        string = PUNCTUATION.sub(' ', string.strip().lower())
-        string = self._remove_digits(string)
+        #string = PUNCTUATION.sub(' ', string.strip().lower())
+        string = self._replace_characters(string)
         string = self._remove_blacklisted_words(string)
-        return string.strip()
+        return string
 
     def _remove_blacklisted_words(self, string):
         return " ".join(filter(lambda s: s not in self.blacklist, string.split()))
 
-    def _remove_digits(self, string):
-        return "".join(filter(lambda c: c.isalpha() or c == " ", string))
+    def _replace_characters(self, string):
+        return "".join(map(self._change_char, string))
+
+    def _change_char(self, c):
+        replace_with_space = ["|", "-", "/"]
+        allow = [" "]
+        if c in replace_with_space:
+            return " "
+        if c in allow or c.isalpha():
+            return c
+        return ""
 
     def _latinize(self, string):
         '''
