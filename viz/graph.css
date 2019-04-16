@@ -1,0 +1,30 @@
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+path.zerolink {
+  fill: none;
+  stroke: green;
+  stroke-width: 3.0px;
+}
+
+path.onelink {
+  fill: none;
+  stroke: blue;
+  stroke-width: 1.0px;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #fff;
+  stroke: black;
+  stroke-width: 1.5px;
+}
+
+text {
+  fill: #000;
+  font: 10px sans-serif;
+  pointer-events: none;
+}
