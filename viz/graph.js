@@ -10,7 +10,6 @@ var graphFile = 'dummy-graph.csv';
 var institutionFile = '../output/labels_clusters.csv';
 var fosFile = 'fos_table.csv';
 
-//
 //d3.csv(graphFile).then(function(edges) {
 //edges.forEach(function(d) {
 //    d.source = +d.source;
@@ -39,6 +38,16 @@ var promises = [
         fos[d.id] = d.label;
     })
 ]
+
+Promise.all(promises).then(ready)
+
+function ready([us]) {
+    console.log("The dataset contains: ");
+    console.log(dataset);
+    console.log(institutions);
+    console.log(fos);
+    plotGraph(dataset);    
+}
 
 // TODO:
 // input institution lookup table, store into hashmap
@@ -82,9 +91,9 @@ function plotGraph(links) {
         }      
     });
     
-    console.log(maxNodeDegree);
-
-    console.log(nodes);
+//    console.log(maxNodeDegree);
+//
+//    console.log(nodes);
 
     var width = 1200,
         height = 700;
@@ -209,14 +218,4 @@ function plotGraph(links) {
 
     });
 
-}
-
-Promise.all(promises).then(ready)
-
-function ready([us]) {
-    console.log("The dataset contains: ");
-    console.log(dataset);
-    console.log(institutions);
-    console.log(fos);
-    plotGraph(dataset);    
 }
