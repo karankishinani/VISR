@@ -9,6 +9,7 @@
 var graphFile = 'edgefile.csv';
 var institutionFile = '../output/labels_clusters.csv';
 var fosFile = 'fos_table.csv';
+var fosSizeFile = 'weight_degree_fit.csv';
 
 //d3.csv(graphFile).then(function(edges) {
 //edges.forEach(function(d) {
@@ -21,15 +22,21 @@ var fosFile = 'fos_table.csv';
 //return edges;
 //});
 
+var width = screen.width,
+    height = screen.height-100;
+
+
 var dataset = [];
 var institutions = {};
 var fos = {};
+var fosSize = {};
 
 var promises = [
     d3.csv(graphFile, function(d) {
-        if (+d.weight > 20 && +d.fos == 6 && (+d.source != -1 && +d.target != -1)){
+        if (+d.source != -1 && +d.target != -1){ //(+d.weight > fosWeight && +d.fos == fosId && ...)
             dataset.push({"source": +d.source, "target": +d.target, "weight": +d.weight, "fos": +d.fos});
         }
+        dataset.push({"source": +d.source, "target": +d.target, "weight": +d.weight, "fos": +d.fos});
     }),
 
     d3.csv(institutionFile, function(d) {
@@ -38,6 +45,10 @@ var promises = [
 
     d3.csv(fosFile, function(d) {
         fos[d.id] = d.label;
+    }),
+
+    d3.csv(fosSizeFile, function(d) {
+        fosSize[d.id] = {"weight": +d.weight, "degree": +d.degree};
     })
 ]
 
@@ -47,7 +58,7 @@ var promises = [
 // input fos lookup table, store into hashmap
 // input node total degree lookup table, store into hash map
 
-function plotGraph(links) {
+function plotGraph(links, fosDegree) {
 
     var nodes = {};
 
@@ -67,7 +78,7 @@ function plotGraph(links) {
     var maxNodeDegree = 0,
         maxEdgeWeight = 0,
         maxNodeDegreeId;
-    
+
 
     links.forEach(function(d) {
         nodes[d.source.name].degree += d.weight;
@@ -87,7 +98,7 @@ function plotGraph(links) {
             maxEdgeWeight = nodes[d.source.name].degree;    
         }      
     });
-    
+
     console.log(maxNodeDegreeId);
 
     filtered_nodes = {};
@@ -96,7 +107,7 @@ function plotGraph(links) {
 
     allNodes.forEach(function(d) {
         // CHANGE
-        if (nodes[d].degree > 15){
+        if (nodes[d].degree > fosDegree){
             filtered_nodes[d] = nodes[d];
         } 
     })
@@ -104,9 +115,6 @@ function plotGraph(links) {
     //    console.log(maxNodeDegree);
     //
     //    console.log(nodes);
-
-    var width = screen.width,
-        height = screen.height;
 
     console.log("nodes");
     console.log(filtered_nodes);
@@ -126,10 +134,7 @@ function plotGraph(links) {
     .alphaTarget(0)
     .on("tick", tick);
 
-    var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    ;
+    var svg = d3.select("svg");
 
     // add the links and the arrows
 
@@ -165,12 +170,7 @@ function plotGraph(links) {
     .range(d3.schemeBlues[9]);
 
     var edgeScale = d3.scaleLinear().domain([0, maxEdgeWeight]).range([0.2,1]);
-        
-//        d3.scaleQuantize()                   
-//    .domain([0, maxEdgeWeight])                   
-//    .range(d3.schemeReds[9].slice(3,10));
-    
-    
+
     // add the nodes
     node.append("circle")
         .attr("r", function(d) { return scale(d.degree); })
@@ -245,14 +245,27 @@ function plotGraph(links) {
 
 }
 
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
+
+
 Promise.all(promises).then(ready)
 
 function ready([us]) {
 
-    //TODO: Year ranges
-    var data = ["2010", "2005", "2000", "1995", "1990"];
+    var data = []
 
-    var select = d3.select('body')
+    //TODO: Year ranges
+    for (var key in fos){
+        data.push(fos[key].toUpperCase());
+    }
+
+    d3.select('body')
+        .append('div')
+        .text('Field of Study');
+
+    var select = d3.select('div')
     .append('select')
     .attr('class','select')
     .on('change',onchange)
@@ -260,22 +273,47 @@ function ready([us]) {
     d3.select('body')
         .append('br')
 
-    // perform initial plot with latest year
-    d3.select(window).on('load',onchange);
-
     var options = select
     .selectAll('option')
     .data(data).enter()
     .append('option')
     .text(function (d) { return d; });
 
-    function onchange() {
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+    ;
 
+    function onchange() {
+        
+        // clear svg content
+        svg.selectAll("*").remove();
+        
+
+        selectValue = d3.select('select').property('value');
+
+        console.log(fosSize)
+
+        fosId = getKeyByValue(fos, selectValue.toLowerCase());
+        fosWeight = fosSize[fosId].weight;
+        fosDegree = fosSize[fosId].degree;
+
+        var data = { records : dataset }
+        var filteredArray = data.records.filter(function(itm){
+            return (itm.weight > fosWeight && itm.fos == fosId);
+        });
+
+        plotGraph(filteredArray, fosDegree);
     }
 
-    console.log("The dataset contains: ");
-    console.log(dataset);
-    console.log(institutions);
-    console.log(fos);
-    plotGraph(dataset);  
+    //    console.log("The dataset contains: ");
+    //    console.log(dataset);
+
+    //filteredArray = filteredArray["records"];
+    //
+    //    console.log(filteredArray);
+    //
+    //    console.log(institutions);
+    //    console.log(fos);
+
 }
