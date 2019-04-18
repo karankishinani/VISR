@@ -1,4 +1,15 @@
-﻿id,label
-0,FOS 1
-1,FOS 2
-2,FOS 3
+id,name
+1,medicine
+2,biology
+3,physics
+4,chemistry
+5,engineering
+6,computer science
+7,psychology
+8,mathematics
+9,social science
+10,environmental science
+11,materials science
+12,business
+13,humanities
+14,social sciences
