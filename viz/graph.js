@@ -23,7 +23,7 @@ var fosSizeFile = 'weight_degree_fit.csv';
 //});
 
 var width = screen.width,
-    height = screen.height-100;
+    height = screen.height-150;
 
 
 var dataset = [];
@@ -36,7 +36,6 @@ var promises = [
         if (+d.source != -1 && +d.target != -1){ //(+d.weight > fosWeight && +d.fos == fosId && ...)
             dataset.push({"source": +d.source, "target": +d.target, "weight": +d.weight, "fos": +d.fos});
         }
-        dataset.push({"source": +d.source, "target": +d.target, "weight": +d.weight, "fos": +d.fos});
     }),
 
     d3.csv(institutionFile, function(d) {
@@ -59,6 +58,8 @@ var promises = [
 // input node total degree lookup table, store into hash map
 
 function plotGraph(links, fosDegree) {
+
+    console.log(links);
 
     var nodes = {};
 
@@ -99,7 +100,7 @@ function plotGraph(links, fosDegree) {
         }      
     });
 
-    console.log(maxNodeDegreeId);
+    //console.log(maxNodeDegreeId);
 
     filtered_nodes = {};
 
@@ -116,8 +117,8 @@ function plotGraph(links, fosDegree) {
     //
     //    console.log(nodes);
 
-    console.log("nodes");
-    console.log(filtered_nodes);
+    //console.log("nodes");
+    //console.log(filtered_nodes);
     //    console.log(nodes);
     //    var filtered = _.result(_.find(nodes, function(chr) {
     //        return chr.degree > 1;
@@ -134,7 +135,10 @@ function plotGraph(links, fosDegree) {
     .alphaTarget(0)
     .on("tick", tick);
 
-    var svg = d3.select("svg");
+    var svg = d3.select("body").append("svg")
+    .attr("id","svg_id")
+    .attr("width", width)
+    .attr("height", height);
 
     // add the links and the arrows
 
@@ -169,7 +173,7 @@ function plotGraph(links, fosDegree) {
     .domain([0, maxNodeDegree])                   
     .range(d3.schemeBlues[9]);
 
-    var edgeScale = d3.scaleLinear().domain([0, maxEdgeWeight]).range([0.2,1]);
+    var edgeScale = d3.scaleLinear().domain([0, maxEdgeWeight]).range([0.1,1]);
 
     // add the nodes
     node.append("circle")
@@ -255,6 +259,7 @@ Promise.all(promises).then(ready)
 function ready([us]) {
 
     var data = []
+    var i = 0
 
     //TODO: Year ranges
     for (var key in fos){
@@ -280,29 +285,54 @@ function ready([us]) {
     .text(function (d) { return d; });
 
     var svg = d3.select("body").append("svg")
-        .attr("width", width)
-        .attr("height", height)
-    ;
+    .attr("id","svg_id")
+    .attr("width", width)
+    .attr("height", height);
 
     function onchange() {
-        
-        // clear svg content
-        svg.selectAll("*").remove();
-        
+
+        // delete svg
+        d3.select("#svg_id").remove();
 
         selectValue = d3.select('select').property('value');
 
-        console.log(fosSize)
+        // console.log(fosSize)
 
         fosId = getKeyByValue(fos, selectValue.toLowerCase());
         fosWeight = fosSize[fosId].weight;
         fosDegree = fosSize[fosId].degree;
 
-        var data = { records : dataset }
-        var filteredArray = data.records.filter(function(itm){
-            return (itm.weight > fosWeight && itm.fos == fosId);
-        });
 
+        var filteredArray = [];
+        console.log('test');
+        console.log('dataset');
+        console.log(dataset.length);
+        console.log(dataset[0]);
+
+        j = 0;
+        dataset.forEach(function(d){
+
+            if (+d.weight > fosWeight && +d.fos == fosId){
+                if(j<5){
+                    j=j+1
+                    console.log(d);
+                }
+                filteredArray.push(Object.assign({}, d));
+            }
+        })
+        //
+        //        var data = { records : dataset }
+        //        
+        //        var filteredArray = data.records.filter(function(itm){
+        //            return (itm.weight > fosWeight && itm.fos == fosId);
+        //        });
+        //        
+        //        console.log('dataset with size: ' + dataset.length);
+        //        console.log(dataset[0]);
+        //        console.log('filteredArray with size: ' + filteredArray.length);
+        //        console.log(filteredArray[0]);
+        //        console.log('i= ' + i);
+        i = i + 1; 
         plotGraph(filteredArray, fosDegree);
     }
 
