@@ -224,27 +224,33 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
             d.fx = null;
             d.fy = null;
             d3.select(this.firstChild)
-                .style('stroke', 'black');
+                .style('stroke', 'black')
+                .style('stroke-width', '1px');
         } else {
             d.fixed = true
             d.fx = d.x;
             d.fy = d.y;
             d3.select(this.firstChild)
-                .style('stroke', 'red');
+                .style('stroke', '#FF8C00')
+                .style('stroke-width', '3px')
+            ;
         }
 
     });
 
     //add zoom capabilities 
     var zoom_handler = d3.zoom()
-    .on("zoom", zoom_actions);
+    .on("zoom", zoom_actions)
+    ;
 
     zoom_handler(svg);  
 
     //Zoom functions 
     function zoom_actions(){
-        g.attr("transform", d3.event.transform)
+        g.attr("transform", d3.event.transform);
     }
+    
+    svg.on("dblclick.zoom", null)
 
 }
 
