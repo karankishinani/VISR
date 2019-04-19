@@ -1,9 +1,28 @@
 <!DOCTYPE>
 <html>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href ="graph.css"/>
-    <script src="lib/d3.v5.min.js"></script>
-    <body>
-        <script src="graph.js"></script>
-    </body>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href ="min.css"/>
+		<link rel="stylesheet" type="text/css" href ="graph.css"/>
+		<script src="lib/d3.v5.min.js"></script>
+		<script src="graph.js"></script>
+	</head>
+	<body style="text-align:center;">
+		<div>
+			<h1>Visualizing Institutional Scholar Relationships</h1>
+		<div style="width:50%;margin:auto;">
+			<div style="float:left;">
+				<span>Field of Study:</span>
+				<select></select>
+				<button type="button" class="btn btn-a btn-sm smooth" onclick="load();">Load</button>
+			</div>
+			<div style="float:right;">
+				<input type="text" name="textInput" placeholder="Search for an Institution..."></input>
+				<button type="button" class="btn btn-a btn-sm smooth" onclick="searchButtonPress();">Search</button>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+		<hr />
+		</div>
+	</body>
 </html>

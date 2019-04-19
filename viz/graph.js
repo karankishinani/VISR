@@ -1,18 +1,18 @@
-var graphFile = 'data/edgefile.csv';
-var institutionFile = 'data/labels_clusters.csv';
-var fosFile = 'data/fos_table.csv';
-var fosSizeFile = 'data/weight_degree_fit.csv';
+const graphFile = 'data/edgefile.csv';
+const institutionFile = 'data/labels_clusters.csv';
+const fosFile = 'data/fos_table.csv';
+const fosSizeFile = 'data/weight_degree_fit.csv';
 
-var marginTop = 200;
+var marginTop = 160;
 
-var width = screen.width,
-    height = screen.height - marginTop;
+const width = window.innerWidth,
+    height = window.innerHeight - marginTop;
 
 
-var dataset = [];
-var institutions = {};
-var fos = {};
-var fosSize = {};
+const dataset = [];
+const institutions = {};
+const fos = {};
+const fosSize = {};
 
 var promises = [
     d3.csv(graphFile, function(d) {
@@ -36,9 +36,9 @@ var promises = [
 
 function plotGraph(links, fosDegree, isSingleInstitution) {
 
-    console.log(links);
+    // console.log(links);
 
-    var nodes = {};
+    const nodes = {};
 
     // Compute the distinct nodes from the links.
     links.forEach(function(link) {
@@ -111,8 +111,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
     var svg = d3.select("body").append("svg")
     .attr("id","svg_id")
     .attr("width", width)
-    .attr("height", height)
-    .attr("margin-top", marginTop);
+    .attr("height", height);
 
     //add encompassing group for the zoom 
     var g = svg.append("g")
@@ -170,7 +169,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
     // add the curvy lines
     function tick() {
         path.attr("d", function(d) {
-            var dx = d.target.x - d.source.x,
+            const dx = d.target.x - d.source.x,
                 dy = d.target.y - d.source.y,
                 dr = 0;
             return "M" +
@@ -240,8 +239,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
 
     //add zoom capabilities 
     var zoom_handler = d3.zoom()
-    .on("zoom", zoom_actions)
-    ;
+        .on("zoom", zoom_actions);
 
     zoom_handler(svg);  
 
@@ -263,93 +261,70 @@ Promise.all(promises).then(ready)
 
 function ready([us]) {
 
-    var data = []
-    var i = 0
+    const data = [];
 
     //TODO: Year ranges
     for (var key in fos){
         data.push(fos[key].toUpperCase());
     }
 
-    d3.select('body')
-        .append('div')
-        .text('Field of Study (select one): ');
+    const select = d3.select('select')
+    const body = d3.select('body')
 
-    var select = d3.select('div')
-    .append('select')
-    .attr('class','select')
-    .on('change',onchange)
+    select.selectAll('option')
+        .data(data).enter()
+        .append('option')
+        .text(function (d) { return d; });
 
-    var body = d3.select('body')
+    d3.select("body")
+        .append("svg")
+        .attr("id","svg_id")
+        .attr("width", width)
+        .attr("height", height);
+}
 
-    body.append('br')
+function load() {
 
-    var options = select
-    .selectAll('option')
-    .data(data).enter()
-    .append('option')
-    .text(function (d) { return d; });
+    // delete svg
+    d3.select("#svg_id").remove();
 
-    body.append('input')
-        .attr('type','text')
-        .attr('name','textInput')
-        .attr('value','Search for an Institution!');
+    selectValue = d3.select('select').property('value');
 
-    body.append('button')
-        .attr('type', 'button')
-        .style('margin-left', '20px')
-        .text('Search')
-        .on('click', searchButtonPress);
-
-    var svg = d3.select("body").append("svg")
-    .attr("id","svg_id")
-    .attr("width", width)
-    .attr("height", height);
-
-    function onchange() {
-
-        // delete svg
-        d3.select("#svg_id").remove();
-
-        selectValue = d3.select('select').property('value');
-
-        fosId = getKeyByValue(fos, selectValue.toLowerCase());
-        minWeight = fosSize[fosId].weight;
-        minDegree = fosSize[fosId].degree;
+    fosId = getKeyByValue(fos, selectValue.toLowerCase());
+    minWeight = fosSize[fosId].weight;
+    minDegree = fosSize[fosId].degree;
 
 
-        var filteredArray = [];
+    const filteredArray = [];
 
-        dataset.forEach(function(d){
+    dataset.forEach(function(d){
 
-            if (+d.weight > minWeight && +d.fos == fosId){
-                filteredArray.push(Object.assign({}, d));
-            }
-        })
-        plotGraph(filteredArray, minDegree, false);
-    }
+        if (+d.weight > minWeight && +d.fos == fosId){
+            filteredArray.push(Object.assign({}, d));
+        }
+    })
+    plotGraph(filteredArray, minDegree, false);
+}
 
-    function searchButtonPress() {
-        d3.select('#svg_id').remove();
+function searchButtonPress() {
+    d3.select('#svg_id').remove();
 
-        selectValue = d3.select('select').property('value');
-        fosId = getKeyByValue(fos, selectValue.toLowerCase());
+    selectValue = d3.select('select').property('value');
+    fosId = getKeyByValue(fos, selectValue.toLowerCase());
 
-        searchString = d3.select('input').property('value');
-        institutionId = getKeyByValue(institutions, searchString.toLowerCase());
+    searchString = d3.select('input').property('value');
+    institutionId = getKeyByValue(institutions, searchString.toLowerCase());
 
-        minWeight = 5;
-        minDegree = 5;
+    minWeight = 5;
+    minDegree = 5;
 
-        var filteredArray = [];
+    const filteredArray = [];
 
-        dataset.forEach(function(d){
+    dataset.forEach(function(d){
 
-            if (+d.weight > minWeight && fosId == +d.fos && (+d.source == institutionId || +d.target == institutionId)){
-                filteredArray.push(Object.assign({}, d));
-            }
-        })
-        plotGraph(filteredArray, minDegree, true);
-    }
-
+        if (+d.weight > minWeight && fosId == +d.fos && (+d.source == institutionId || +d.target == institutionId)){
+            filteredArray.push(Object.assign({}, d));
+        }
+    })
+    plotGraph(filteredArray, minDegree, true);
 }

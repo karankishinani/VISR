@@ -1,3 +1,7 @@
+.float {
+	float: left;
+}
+
 circle {
   fill: #ccc;
   stroke: #fff;
@@ -11,4 +15,23 @@ text {
   pointer-events: none;
 }
 
-svg {display: block; width: 100%; margin: 0 auto;}
+svg {
+	display: block;
+	width: 100%;
+	margin: 0 auto;
+}
+
+
+body {
+	margin: 0.5em;
+	background: #fefefa;
+}
+
+input[type="text"], select {
+	border-radius: 6px;
+}
+
+button {
+	padding-top: 9px !important;
+	padding-bottom: 9px !important;
+}
