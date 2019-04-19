@@ -3,7 +3,7 @@ var institutionFile = 'data/labels_clusters.csv';
 var fosFile = 'data/fos_table.csv';
 var fosSizeFile = 'data/weight_degree_fit.csv';
 
-var marginTop = 10;
+var marginTop = 200;
 
 var width = screen.width,
     height = screen.height - marginTop;
@@ -58,11 +58,11 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
         maxEdgeWeight = 0,
         maxNodeDegreeId;
 
-    
+
     links.forEach(function(d) {
         nodes[d.source.name].degree += d.weight;
         nodes[d.target.name].degree += d.weight;
-        
+
         totalWeight += d.weight;
 
         if (nodes[d.source.name].degree > maxNodeDegree) {      
@@ -79,7 +79,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
             maxEdgeWeight = nodes[d.source.name].degree;    
         }      
     });
-    
+
     var avgWeight = totalWeight * 2 / links.length;
 
     filtered_nodes = {};
@@ -107,23 +107,27 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
     .force("charge", d3.forceManyBody().strength(strengthVal))
     .alphaTarget(0)
     .on("tick", tick);
-    
+
     var svg = d3.select("body").append("svg")
     .attr("id","svg_id")
     .attr("width", width)
     .attr("height", height)
     .attr("margin-top", marginTop);
 
+    //add encompassing group for the zoom 
+    var g = svg.append("g")
+    .attr("class", "everything");
+
     // add the links and the arrows
 
-    var path = svg.append("g")
+    var path = g.append("g")
     .selectAll("path")
     .data(links)
     .enter()
     .append("path");
 
     // define the nodes
-    var node = svg.selectAll(".node")
+    var node = g.selectAll(".node")
     .data(force.nodes())
     .enter().append("g")
     .attr("class", "node")
@@ -132,8 +136,8 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
           .on("drag", dragged)
           .on("end", dragended)
          );
-    
-    
+
+
     var scale = d3.scaleLinear().domain([0, maxNodeDegree]).range([3,20]);
     var singleScale = d3.scaleLinear().domain([0, maxNodeDegree]).range([8,18]);
 
@@ -142,7 +146,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
     .range(d3.schemeBlues[9]);
 
     var edgeScale = d3.scaleLinear().domain([0, maxEdgeWeight]).range([0.1,1]);
-    
+
     if (!isSingleInstitution) {
         // add the nodes
         node.append("circle")
@@ -154,7 +158,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
             .attr("r", function(d) { return singleScale(d.degree); })
             .style("fill", function(d) { return cScale(d.degree); });
     }
-        
+
 
     // add the labels
     node.append("text")
@@ -177,12 +181,12 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
                 d.target.y;
         })
             .attr('stroke', function(d) {
-                if (d.weight > avgWeight) {
-                    return 'red';
-                } else {
-                    return 'teal'
-                }
-            })
+            if (d.weight > avgWeight) {
+                return 'red';
+            } else {
+                return 'teal'
+            }
+        })
             .attr('stroke-opacity', function(d) { return edgeScale(d.weight); });
 
         node
@@ -231,6 +235,17 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
 
     });
 
+    //add zoom capabilities 
+    var zoom_handler = d3.zoom()
+    .on("zoom", zoom_actions);
+
+    zoom_handler(svg);  
+
+    //Zoom functions 
+    function zoom_actions(){
+        g.attr("transform", d3.event.transform)
+    }
+
 }
 
 function getKeyByValue(object, value) {
@@ -258,9 +273,9 @@ function ready([us]) {
     .append('select')
     .attr('class','select')
     .on('change',onchange)
-    
+
     var body = d3.select('body')
-    
+
     body.append('br')
 
     var options = select
@@ -268,17 +283,17 @@ function ready([us]) {
     .data(data).enter()
     .append('option')
     .text(function (d) { return d; });
-    
+
     body.append('input')
-    .attr('type','text')
-    .attr('name','textInput')
-    .attr('value','Search for an Institution!');
-    
+        .attr('type','text')
+        .attr('name','textInput')
+        .attr('value','Search for an Institution!');
+
     body.append('button')
-    .attr('type', 'button')
-    .style('margin-left', '20px')
-    .text('Search')
-    .on('click', searchButtonPress);
+        .attr('type', 'button')
+        .style('margin-left', '20px')
+        .text('Search')
+        .on('click', searchButtonPress);
 
     var svg = d3.select("body").append("svg")
     .attr("id","svg_id")
@@ -300,30 +315,30 @@ function ready([us]) {
         var filteredArray = [];
 
         dataset.forEach(function(d){
-            
+
             if (+d.weight > minWeight && +d.fos == fosId){
                 filteredArray.push(Object.assign({}, d));
             }
         })
         plotGraph(filteredArray, minDegree, false);
     }
-    
+
     function searchButtonPress() {
         d3.select('#svg_id').remove();
-        
+
         selectValue = d3.select('select').property('value');
         fosId = getKeyByValue(fos, selectValue.toLowerCase());
-        
+
         searchString = d3.select('input').property('value');
         institutionId = getKeyByValue(institutions, searchString.toLowerCase());
-        
+
         minWeight = 5;
         minDegree = 5;
 
         var filteredArray = [];
 
         dataset.forEach(function(d){
-            
+
             if (+d.weight > minWeight && fosId == +d.fos && (+d.source == institutionId || +d.target == institutionId)){
                 filteredArray.push(Object.assign({}, d));
             }
