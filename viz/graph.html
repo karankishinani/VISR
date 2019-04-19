@@ -8,6 +8,9 @@
 		<script src="graph.js"></script>
 	</head>
 	<body style="text-align:center;">
+		<div class="overlay">
+			<span style="font-style:italic;font-weight:bold;">Graph is being processed...</span>
+		</div>
 		<div>
 			<h1>Visualizing Institutional Scholar Relationships</h1>
 		<div style="width:50%;margin:auto;">
@@ -17,7 +20,7 @@
 				<button type="button" class="btn btn-a btn-sm smooth" onclick="load();">Load</button>
 			</div>
 			<div style="float:right;">
-				<input type="text" name="textInput" placeholder="Search for an Institution..."></input>
+				<input type="text" name="textInput" placeholder="Search for an Institution"></input>
 				<button type="button" class="btn btn-a btn-sm smooth" onclick="searchButtonPress();">Search</button>
 			</div>
 			<div style="clear:both;"></div>

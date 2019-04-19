@@ -281,6 +281,8 @@ function ready([us]) {
         .attr("id","svg_id")
         .attr("width", width)
         .attr("height", height);
+    
+    document.body.removeChild(document.querySelector('.overlay'));
 }
 
 function load() {
