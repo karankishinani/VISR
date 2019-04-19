@@ -289,6 +289,7 @@ function load() {
 
     // delete svg
     d3.select("#svg_id").remove();
+    d3.select("#instSearchBox").property("value", "");
 
     selectValue = d3.select('select').property('value');
 
@@ -317,16 +318,20 @@ function searchButtonPress() {
     searchString = d3.select('input').property('value');
     institutionId = getKeyByValue(institutions, searchString.toLowerCase());
 
-    minWeight = 5;
-    minDegree = 5;
+    if (institutionId) {
+        minWeight = 5;
+        minDegree = 5;
 
-    const filteredArray = [];
+        const filteredArray = [];
 
-    dataset.forEach(function(d){
+        dataset.forEach(function(d){
 
-        if (+d.weight > minWeight && fosId == +d.fos && (+d.source == institutionId || +d.target == institutionId)){
-            filteredArray.push(Object.assign({}, d));
-        }
-    })
-    plotGraph(filteredArray, minDegree, true);
+            if (+d.weight > minWeight && fosId == +d.fos && (+d.source == institutionId || +d.target == institutionId)){
+                filteredArray.push(Object.assign({}, d));
+            }
+        })
+        plotGraph(filteredArray, minDegree, true);
+    } else {
+        alert("The institution could not be found in this field.");
+    }
 }
