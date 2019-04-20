@@ -135,9 +135,9 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
             return "<div id=" + ID + ">Loading..</div>"
         })
         .direction('n') 
-        .offset([-20, 0]);
+        .offset([-60, 0]);
 
-    //svg.call(tip);
+    svg.call(tip);
 
     // define the nodes
     var node = g.selectAll(".node")
@@ -159,7 +159,6 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
             tip.hide(d)
         }
     });
-
 
     var scale = d3.scaleLinear().domain([0, maxNodeDegree]).range([3,20]);
     var singleScale = d3.scaleLinear().domain([0, maxNodeDegree]).range([8,18]);
@@ -247,7 +246,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
 
     node.on("click", function(d){
         d3.select(this).classed('active',!d3.select(this).classed('active'));
-        //tip.show(d);
+        tip.show(d);
         if (d3.select(this).classed('active')){
             path.attr("d",function(i){
                 if ((i.source.name == d.name) || (i.target.name == d.name)){
@@ -315,12 +314,13 @@ function knowledgeGraphRequest(ID, d) {
     Http.open("GET", url);
     Http.send();
     Http.onreadystatechange=(e)=> {
+        console.log(Http);
         var response = JSON.parse(Http.responseText)['itemListElement']
         var name = query.toUpperCase();
         var desc = '';
         var url = '';
         var image = '';
-        if (response != "" && 'result' in response[0]) {
+        if (Http['status'] == 200 && response != "" && 'result' in response[0]) {
             if (parseFloat(response[0]['resultScore']) >= 100.0) {
                response = response[0]['result']
                 if ('name' in response) {
