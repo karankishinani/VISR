@@ -3,11 +3,10 @@ const institutionFile = 'data/labels_clusters.csv';
 const fosFile = 'data/fos_table.csv';
 const fosSizeFile = 'data/weight_degree_fit.csv';
 
-var marginTop = 160;
+const bodyMargins = 16;
 
-const width = window.innerWidth,
-    height = window.innerHeight - marginTop;
-
+const width = window.innerWidth;
+let height = 0;
 
 const dataset = [];
 const institutions = {};
@@ -275,6 +274,8 @@ function ready([us]) {
         .data(data).enter()
         .append('option')
         .text(function (d) { return d; });
+
+    height =  window.innerHeight - document.getElementById("topBox").offsetHeight - bodyMargins - 10;
 
     d3.select("body")
         .append("svg")

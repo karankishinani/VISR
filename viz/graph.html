@@ -7,25 +7,21 @@
 		<script src="lib/d3.v5.min.js"></script>
 		<script src="graph.js"></script>
 	</head>
-	<body style="text-align:center;">
+	<body>
 		<div class="overlay">
 			<span style="font-style:italic;font-weight:bold;">Graph is being processed...</span>
 		</div>
-		<div>
+		<div id="topBox" style="text-align:center;">
 			<h1>Visualizing Institutional Scholar Relationships</h1>
-		<div style="width:50%;margin:auto;">
-			<div style="float:left;">
-				<span>Field of Study:</span>
-				<select></select>
-				<button type="button" class="btn btn-a btn-sm smooth" onclick="load();">Load</button>
+			<div class="adjustable">
+				<span class="lfloat" style="padding-top:9px;padding-bottom:9px;margin-top:1px;margin-bottom:1px;">Field:</span>
+				<select class="lfloat"></select>
+				<button type="button" class="btn btn-a btn-sm smooth lfloat" onclick="load();">Load</button>
+				<button type="button" class="btn btn-a btn-sm smooth rfloat" onclick="searchButtonPress();">Search</button>
+				<input class="rfloat" type="text" id="instSearchBox" placeholder="Search for an Institution"></input>
+				<div style="clear:both;"></div>
 			</div>
-			<div style="float:right;">
-				<input type="text" id="instSearchBox" placeholder="Search for an Institution"></input>
-				<button type="button" class="btn btn-a btn-sm smooth" onclick="searchButtonPress();">Search</button>
-			</div>
-			<div style="clear:both;"></div>
-		</div>
-		<hr />
+			<hr />
 		</div>
 	</body>
 </html>
