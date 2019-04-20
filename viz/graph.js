@@ -124,16 +124,41 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
     .enter()
     .append("path");
 
+    var tooltip_just_created = false;
+
+    let tip = d3.tip()
+        .attr('class', 'tooltip')
+        .html(d =>  {
+            tooltip_just_created = true;
+            const ID = Math.random().toString(36).substring(7);
+            knowledgeGraphRequest(ID, d)
+            return "<div id=" + ID + ">Loading..</div>"
+        })
+        .direction('n') 
+        .offset([-20, 0]);
+
+    //svg.call(tip);
+
     // define the nodes
     var node = g.selectAll(".node")
     .data(force.nodes())
     .enter().append("g")
-    .attr("class", "node")
+    .attr("id", "node")
     .call(d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended)
          );
+
+
+    // Disable tooltip
+    d3.select('body').on('click', (d) => {
+        if (tooltip_just_created) {
+            tooltip_just_created = false;
+        }else {
+            tip.hide(d)
+        }
+    });
 
 
     var scale = d3.scaleLinear().domain([0, maxNodeDegree]).range([3,20]);
@@ -222,6 +247,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
 
     node.on("click", function(d){
         d3.select(this).classed('active',!d3.select(this).classed('active'));
+        //tip.show(d);
         if (d3.select(this).classed('active')){
             path.attr("d",function(i){
                 if ((i.source.name == d.name) || (i.target.name == d.name)){
@@ -281,14 +307,55 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
 
 }
 
+function knowledgeGraphRequest(ID, d) {
+    const Http = new XMLHttpRequest();
+    const key = "AIzaSyBu15yBGhAoJp3u7pudHj7egNoA54Yr538";
+    const query = institutions[d.name];
+    const url="https://kgsearch.googleapis.com/v1/entities:search?limit=1&prefix=true&query=" + query + "&key=" + key;
+    Http.open("GET", url);
+    Http.send();
+    Http.onreadystatechange=(e)=> {
+        var response = JSON.parse(Http.responseText)['itemListElement']
+        var name = query.toUpperCase();
+        var desc = '';
+        var url = '';
+        var image = '';
+        if (response != "" && 'result' in response[0]) {
+            if (parseFloat(response[0]['resultScore']) >= 100.0) {
+               response = response[0]['result']
+                if ('name' in response) {
+                    name = response['name'];
+                }
+                if ('description' in response) {
+                    desc = response['description'];
+                }
+                if ('url' in response) {
+                    url = response['url'];
+                }
+                if ('image' in response && 'contentUrl' in response['image']) {
+                    image = response['image']['contentUrl'];
+                }  
+            }
+        }
+        document.getElementById(ID).innerHTML =
+                                (image ? "<img width=\"100px\" src=\"" + image + "\"/>" : "") +
+                                "<div style=\"float: right; padding-left:5px\">" +
+                                    "<b>" + name + "</b><br /><br />" +
+                                    (desc ? "" + desc + "</br>" : "") +
+                                    (url ? "<a href="  +url + " target=\"_blank\">Homepage</ a></br>" : "") +
+                                "</div>";
+    };
+}
+
+
 function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
 }
 
-
 Promise.all(promises).then(ready)
 
 function ready([us]) {
+
 
     const data = [];
 
@@ -312,6 +379,7 @@ function ready([us]) {
         .attr("id","svg_id")
         .attr("width", width)
         .attr("height", height);
+
     
     document.body.removeChild(document.querySelector('.overlay'));
 }
