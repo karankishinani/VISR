@@ -246,8 +246,8 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
 
     node.on("click", function(d){
         d3.select(this).classed('active',!d3.select(this).classed('active'));
-        tip.show(d);
         if (d3.select(this).classed('active')){
+            tip.show(d);    
             path.attr("d",function(i){
                 if ((i.source.name == d.name) || (i.target.name == d.name)){
                     d3.select(this).classed('path-active',true);
