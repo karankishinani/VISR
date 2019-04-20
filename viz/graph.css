@@ -1,43 +1,45 @@
 .float {
-	float: left;
+    float: left;
 }
 
 circle {
-  fill: #ccc;
-  stroke: #fff;
-  stroke: black;
-  stroke-width: 1.5px;
+    fill: #ccc;
+    stroke: #fff;
+    stroke: black;
+    stroke-width: 1.5px;
 }
 
 text {
-  fill: #000;
-  font: 10px sans-serif;
-  pointer-events: none;
+    fill: #000;
+    font: 10px sans-serif;
+    pointer-events: none;
 }
 
 svg {
-	display: block;
-	width: 100%;
-	margin: 0 auto;
+    display: block;
+    width: 100%;
+    margin: 0 auto;
 }
 
 
 body {
-	margin: 0.5em;
-	background: #fefefa;
+    margin: 0.5em;
+    background: #fefefa;
 }
 
 input[type="text"], select {
-	border-radius: 6px;
-  padding-top: 9px;
-  padding-bottom: 9px;
+    border-radius: 6px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    width: 300px;
+    
 }
 
 button {
-	padding-top: 9px !important;
-	padding-bottom: 9px !important;
-  margin-top: 1px !important;
-  margin-bottom: 1px !important;
+    padding-top: 9px !important;
+    padding-bottom: 9px !important;
+    margin-top: 1px !important;
+    margin-bottom: 1px !important;
 }
 
 .overlay{
@@ -55,38 +57,38 @@ button {
 }
 
 .adjustable {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 @media only screen and (min-width: 650px) {
-  .adjustable {
-    display: block;
-    margin: auto;
-  }
+    .adjustable {
+        display: block;
+        margin: auto;
+    }
 
-  .lfloat {
-    float: left;
-  }
+    .lfloat {
+        float: left;
+    }
 
-  .rfloat {
-    float: right;
-  }
+    .rfloat {
+        float: right;
+    }
 }
 
 @media only screen and (min-width: 850px) {
-  .adjustable {
-    width: 80%;
-  }
+    .adjustable {
+        width: 80%;
+    }
 }
 
 @media only screen and (min-width: 1250px) {
-  .adjustable {
-    width: 50%;
-  }
+    .adjustable {
+        width: 50%;
+    }
 }
 
 .path-active{
@@ -105,3 +107,10 @@ button {
 }
 
 
+select{ 
+    background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEuNDEgNC42NyAyLjQ4IDMuMTggMy41NCA0LjY3IDEuNDEgNC42NyIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIzLjU0IDUuMzMgMi40OCA2LjgyIDEuNDEgNS4zMyAzLjU0IDUuMzMiLz48L3N2Zz4=) no-repeat 95% 50%;
+    -moz-appearance: none; 
+    -webkit-appearance: none; 
+    appearance: none;
+    width: 225px;
+}
