@@ -13,6 +13,8 @@ const institutions = {};
 const fos = {};
 const fosSize = {};
 
+var tip;
+
 var promises = [
     d3.csv(graphFile, function(d) {
         if (+d.source != -1 && +d.target != -1){ //(+d.weight > fosWeight && +d.fos == fosId && ...)
@@ -124,12 +126,9 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
     .enter()
     .append("path");
 
-    var tooltip_just_created = false;
-
-    let tip = d3.tip()
+    tip = d3.tip()
         .attr('class', 'tooltip')
         .html(d =>  {
-            tooltip_just_created = true;
             const ID = Math.random().toString(36).substring(7);
             knowledgeGraphRequest(ID, d)
             return "<div id=" + ID + ">Loading..</div>"
@@ -149,16 +148,6 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
           .on("drag", dragged)
           .on("end", dragended)
          );
-
-
-    // Disable tooltip
-    d3.select('body').on('click', (d) => {
-        if (tooltip_just_created) {
-            tooltip_just_created = false;
-        }else {
-            tip.hide(d)
-        }
-    });
 
     var scale = d3.scaleLinear().domain([0, maxNodeDegree]).range([3,20]);
     var singleScale = d3.scaleLinear().domain([0, maxNodeDegree]).range([8,18]);
@@ -244,10 +233,9 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
         }
     };
 
-    node.on("click", function(d){
+    node.on("click", function(d) {
         d3.select(this).classed('active',!d3.select(this).classed('active'));
-        tip.show(d);
-        if (d3.select(this).classed('active')){
+        if (d3.select(this).classed('active')){   
             path.attr("d",function(i){
                 if ((i.source.name == d.name) || (i.target.name == d.name)){
                     d3.select(this).classed('path-active',true);
@@ -290,6 +278,11 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
         }
 
     });
+
+    node.on('contextmenu', (d) => {
+        d3.event.preventDefault();
+        tip.show(d);
+    })
 
     //add zoom capabilities 
     var zoom_handler = d3.zoom()
@@ -339,14 +332,14 @@ function knowledgeGraphRequest(ID, d) {
         }
         document.getElementById(ID).innerHTML =
                                 (image ? "<img width=\"100px\" src=\"" + image + "\"/>" : "") +
-                                "<div style=\"float: right; padding-left:5px\">" +
-                                    "<b>" + name + "</b><br /><br />" +
-                                    (desc ? "" + desc + "</br>" : "") +
-                                    (url ? "<a href="  +url + " target=\"_blank\">Homepage</ a></br>" : "") +
+                                "<div style=\"float: right; padding-left:5px; padding-right:20px; position:relative; \">" +
+                                    '<img src="download.png" width="26px" style="position:absolute; top:-13px; right:-13px;" onclick="tip.hide()" </img>' +
+                                    "<b>" + name + "</b><br />" +
+                                    (desc ? "<br />" + desc : "") +
+                                    (url ? "<br /><a href="  +url + " target=\"_blank\">Homepage</ a></br>" : "") +
                                 "</div>";
     };
 }
-
 
 function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
