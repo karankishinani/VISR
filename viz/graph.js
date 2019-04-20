@@ -179,10 +179,15 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
                 d.target.y;
         })
             .attr('stroke', function(d) {
-            if (d.weight > avgWeight) {
-                return 'red';
-            } else {
-                return 'teal'
+            if (!d3.select(this).classed('path-active')){
+                if (d.weight > avgWeight) {
+                    return 'red';
+                } else {
+                    return 'teal'
+                }
+            }
+            else{
+                return "orange";
             }
         })
             .attr('stroke-opacity', function(d) { return edgeScale(d.weight); });
@@ -215,6 +220,31 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
         }
     };
 
+    node.on("click", function(d){
+        d3.select(this).classed('active',!d3.select(this).classed('active'));
+        if (d3.select(this).classed('active')){
+            path.attr("d",function(i){
+                if ((i.source.name == d.name) || (i.target.name == d.name)){
+                    d3.select(this).classed('path-active',true);
+                    d3.select(this).attr("stroke", 'red');
+                    d3.select(this).attr("stroke-width", '5px');
+                }
+
+                else{
+                    d3.select(this).classed('path-active',false);
+                    d3.select(this).attr("stroke", 'teal');
+                    d3.select(this).attr("stroke-width", '1px');
+                }
+            });
+        }
+        else{
+            path.attr("d",function(i){
+                d3.select(this).classed('path-active',false);
+                d3.select(this).attr("stroke-width", '1px');
+            });
+        }
+    
+            });
     node.on("dblclick",function(d){
 
         if (d.fixed == true){

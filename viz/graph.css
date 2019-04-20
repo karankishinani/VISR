@@ -88,3 +88,8 @@ button {
     width: 50%;
   }
 }
+
+.path-active{
+    stroke: 'yellow';
+    fill: 'yellow';
+}
