@@ -129,10 +129,10 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
     tip = d3.tip()
         .attr('class', 'tooltip')
         .html(d =>  {
-            const ID = Math.random().toString(36).substring(7);
-            knowledgeGraphRequest(ID, d)
-            return "<div id=" + ID + ">Loading..</div>"
-        })
+        const ID = Math.random().toString(36).substring(7);
+        knowledgeGraphRequest(ID, d)
+        return "<div id=" + ID + ">Loading..</div>"
+    })
         .direction('n') 
         .offset([-60, 0]);
 
@@ -182,8 +182,8 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
     function tick() {
         path.attr("d", function(d) {
             const dx = d.target.x - d.source.x,
-                dy = d.target.y - d.source.y,
-                dr = 0;
+                  dy = d.target.y - d.source.y,
+                  dr = 0;
             return "M" +
                 d.source.x + "," +
                 d.source.y + "A" +
@@ -256,8 +256,8 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
                 d3.select(this).attr("stroke-width", '1px');
             });
         }
-    
-            });
+
+    });
     node.on("dblclick",function(d){
 
         if (d.fixed == true){
@@ -286,7 +286,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
 
     //add zoom capabilities 
     var zoom_handler = d3.zoom()
-        .on("zoom", zoom_actions);
+    .on("zoom", zoom_actions);
 
     zoom_handler(svg);  
 
@@ -294,7 +294,7 @@ function plotGraph(links, fosDegree, isSingleInstitution) {
     function zoom_actions(){
         g.attr("transform", d3.event.transform);
     }
-    
+
     svg.on("dblclick.zoom", null)
 
 }
@@ -315,7 +315,7 @@ function knowledgeGraphRequest(ID, d) {
         var image = '';
         if (Http['status'] == 200 && response != "" && 'result' in response[0]) {
             if (parseFloat(response[0]['resultScore']) >= 100.0) {
-               response = response[0]['result']
+                response = response[0]['result']
                 if ('name' in response) {
                     name = response['name'];
                 }
@@ -331,13 +331,13 @@ function knowledgeGraphRequest(ID, d) {
             }
         }
         document.getElementById(ID).innerHTML =
-                                (image ? "<img width=\"100px\" src=\"" + image + "\"/>" : "") +
-                                "<div style=\"float: right; padding-left:5px; padding-right:20px; position:relative; \">" +
-                                    '<img src="download.png" width="26px" style="position:absolute; top:-13px; right:-13px;" onclick="tip.hide()" </img>' +
-                                    "<b>" + name + "</b><br />" +
-                                    (desc ? "<br />" + desc : "") +
-                                    (url ? "<br /><a href="  +url + " target=\"_blank\">Homepage</ a></br>" : "") +
-                                "</div>";
+            (image ? "<img width=\"100px\" src=\"" + image + "\"/>" : "") +
+            "<div style=\"float: right; padding-left:5px; padding-right:20px; position:relative; \">" +
+            '<img src="download.png" width="26px" style="position:absolute; top:-13px; right:-13px;" onclick="tip.hide()" </img>' +
+            "<b>" + name + "</b><br />" +
+            (desc ? "<br />" + desc : "") +
+            (url ? "<br /><a href="  +url + " target=\"_blank\">Homepage</ a></br>" : "") +
+            "</div>";
     };
 }
 
@@ -373,8 +373,14 @@ function ready([us]) {
         .attr("width", width)
         .attr("height", height);
 
-    
+
     document.body.removeChild(document.querySelector('.overlay'));
+
+    /*An array containing all the country names in the world:*/
+    var institutions_list = _.values(institutions);
+
+    /*initiate the autocomplete function on the "instSearchBox" element, and pass along the countries array as possible autocomplete values:*/
+    autocomplete(document.getElementById("instSearchBox"), institutions_list);
 }
 
 function load() {
@@ -427,3 +433,109 @@ function searchButtonPress() {
         alert("The institution could not be found in this field.");
     }
 }
+
+// Autocomplete Feature implemented Below 
+// Adapted from https://www.w3schools.com/howto/howto_js_autocomplete.asp
+
+function autocomplete(inp, arr) {
+    /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function(e) {
+        var a, b, i, val = this.value;
+
+        // Only autocomplete if length is bigger than 5
+        if (val.length >= 5){
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false;}
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].toUpperCase().substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].toUpperCase().substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i].toUpperCase() + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function(e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+
+        }
+    });
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function(e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+            currentFocus++;
+            /*and and make the current item more visible:*/
+            addActive(x);
+        } else if (e.keyCode == 38) { //up
+            /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+            currentFocus--;
+            /*and and make the current item more visible:*/
+            addActive(x);
+        } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+                /*and simulate a click on the "active" item:*/
+                if (x) x[currentFocus].click();
+            }
+        }
+    });
+    function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+    }
+    function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+            x[i].classList.remove("autocomplete-active");
+        }
+    }
+    function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+            }
+        }
+    }
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
+}
+
