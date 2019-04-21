@@ -376,8 +376,17 @@ function ready([us]) {
 
     document.body.removeChild(document.querySelector('.overlay'));
 
+    var institutions_list = {}
+
     /*An array containing all the country names in the world:*/
-    var institutions_list = _.values(institutions);
+    for (key in institutions){
+        institutions_list[institutions[key][0]] = []
+    }
+    for (key in institutions){
+        institutions_list[institutions[key][0]].push(institutions[key])
+    }
+
+    //var institutions_list = _.values(institutions);
 
     /*initiate the autocomplete function on the "instSearchBox" element, and pass along the countries array as possible autocomplete values:*/
     autocomplete(document.getElementById("instSearchBox"), institutions_list);
@@ -437,13 +446,18 @@ function searchButtonPress() {
 // Autocomplete Feature implemented Below 
 // Adapted from https://www.w3schools.com/howto/howto_js_autocomplete.asp
 
-function autocomplete(inp, arr) {
+function autocomplete(inp, hashmap) {
     /*the autocomplete function takes two arguments,
   the text field element and an array of possible autocompleted values:*/
+
     var currentFocus;
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
+
         var a, b, i, val = this.value;
+
+        console.log(hashmap);
+        var arr = hashmap[val[0].toLowerCase()];
 
         // Only autocomplete if length is bigger than 5
         if (val.length >= 5){
@@ -477,6 +491,10 @@ function autocomplete(inp, arr) {
                         closeAllLists();
                     });
                     a.appendChild(b);
+                    
+                    // if more than 500 results, break
+                    if (val[0].toLowerCase() == 'u' && i >= 3000)
+                        break;
                 }
             }
 
@@ -538,4 +556,3 @@ function autocomplete(inp, arr) {
         closeAllLists(e.target);
     });
 }
-
