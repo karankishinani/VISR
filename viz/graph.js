@@ -492,7 +492,7 @@ function autocomplete(inp, hashmap) {
                     });
                     a.appendChild(b);
                     
-                    // if more than 500 results, break
+                    // if more than 500 results and starts with U (as in university), break
                     if (val[0].toLowerCase() == 'u' && i >= 3000)
                         break;
                 }
