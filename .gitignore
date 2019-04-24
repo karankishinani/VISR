@@ -1,2 +1,4 @@
 .ipynb_checkpoints/
 .DS_Store
+viz/data/labels_clusters.csv
+viz/data/edgefile.csv
