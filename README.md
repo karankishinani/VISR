@@ -2,14 +2,14 @@
 
 ## Project
 
-Download: https://drive.google.com/file/d/1UMfZhA5uuEmEDAyY7_4xBnaQLVsv_6rN/view
+All the code for the project contained in the `./CODE` directory.
 
-Unzip the project, and navigate to it.
+## Data Files to Download
 
-## Raw Unique Institution Names
+### Raw Unique Institution Names
 Download: https://drive.google.com/file/d/1lKwpA3zjHrVqNqjMds_jAscbyeL4i-Qb/view
 
-## Clustering of the Institution Names
+### Clustering of the Institution Names
 This process operated off the original data file to get a list of fields by paper.
 Because of the severe size & time required to set this up, we have replicated the final step of this which is the simplification from specific fields to the general 13 that we constructed.
 Download: https://drive.google.com/file/d/1doD_s5MXSSc0jFReCaajA_j_4sEiTXJC/view
