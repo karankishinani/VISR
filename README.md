@@ -36,7 +36,7 @@ Download: https://drive.google.com/file/d/1doD_s5MXSSc0jFReCaajA_j_4sEiTXJC/view
 3. Field names are converted to ID values specified ub FOSIDMAP.txt via bash script `replace.sh`
 3. This output is merged with the institution data and sent to Hadoop MapReduce
 
-## Vizualization the results
+## Vizualizing the results (Visualization)
 #### Requirements
 * A http server. [This](https://www.npmjs.com/package/http-server) was used when testing. Alternatively, a program such as [Brackets](http://brackets.io/) can be used to run the vizualization. 
 * A browser
