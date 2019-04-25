@@ -31,7 +31,7 @@ Download: https://drive.google.com/file/d/1doD_s5MXSSc0jFReCaajA_j_4sEiTXJC/view
 * Python 3
 
 #### Steps
-1. Navigate to `DVA6262_GrouProject/fos/`
+1. Navigate to `DVA6262_GroupProject/fos/`
 2. Run script via `python map.py simplified_fields.txt > $output_file`
 3. Field names are converted to ID values specified ub FOSIDMAP.txt via bash script `replace.sh`
 3. This output is merged with the institution data and sent to Hadoop MapReduce
