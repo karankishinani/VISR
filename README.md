@@ -43,6 +43,6 @@ Download: https://drive.google.com/file/d/1doD_s5MXSSc0jFReCaajA_j_4sEiTXJC/view
 
 #### Steps
 1. Navigate to `DVA6262_GroupProject/viz/data/`
-2. Extract the 2 zip files here into the same location if `edgefile.csv` and `labels_clusters.csv` are not in the folder in 1.
+2. Extract the 2 zip files in `DVA6262_GroupProject/viz/data/` if `edgefile.csv` and `labels_clusters.csv` are not in the folder.
 3. Navigate to `DVA6262_GroupProject/viz/`
-4. Start the http server i.e `http-server`.
+4. Start the http server i.e `http-server` and open `graph.html` 
