@@ -38,7 +38,7 @@ Download: https://drive.google.com/file/d/1doD_s5MXSSc0jFReCaajA_j_4sEiTXJC/view
 
 ## Vizualization the results
 #### Requirements
-* A http server. [This](https://www.npmjs.com/package/http-server) was used when testing.
+* A http server. [This](https://www.npmjs.com/package/http-server) was used when testing. Alternatively, a program such as [Brackets](http://brackets.io/) can be used to run the vizualization. 
 * A browser
 
 #### Steps
