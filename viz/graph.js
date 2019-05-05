@@ -1,7 +1,7 @@
-const graphFile = 'data/edgefile.csv';
-const institutionFile = 'data/labels_clusters.csv';
-const fosFile = 'data/fos_table.csv';
-const fosSizeFile = 'data/weight_degree_fit.csv';
+const graphFile = 'viz/data/edgefile.csv';
+const institutionFile = 'viz/data/labels_clusters.csv';
+const fosFile = 'viz/data/fos_table.csv';
+const fosSizeFile = 'viz/data/weight_degree_fit.csv';
 
 const bodyMargins = 16;
 
