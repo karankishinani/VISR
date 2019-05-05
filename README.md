@@ -43,13 +43,13 @@ and included in the database of institutions.
 
 *NOTE:* This process takes time to run, if you just want to observe the final visualization, just running the code from the previous section should be sufficient.
 
-###Data Files to Download
+### Data Files to Download
  
-####Raw Unique Institution Names
+#### Raw Unique Institution Names
 
 Download: https://drive.google.com/file/d/1lKwpA3zjHrVqNqjMds_jAscbyeL4i-Qb/view
 
-####Clustering of the Institution Names
+#### Clustering of the Institution Names
 
 This process operated off the original data file to get a list of fields by paper.
 
