@@ -1,7 +1,7 @@
-const graphFile = 'viz/data/edgefile.csv';
-const institutionFile = 'viz/data/labels_clusters.csv';
-const fosFile = 'viz/data/fos_table.csv';
-const fosSizeFile = 'viz/data/weight_degree_fit.csv';
+const graphFile = 'https://karankishinani.github.io/VISR/viz/data/edgefile.csv';
+const institutionFile = 'https://karankishinani.github.io/VISR/viz/data/labels_clusters.csv';
+const fosFile = 'https://karankishinani.github.io/VISR/viz/data/fos_table.csv';
+const fosSizeFile = 'https://karankishinani.github.io/VISR/viz/data/weight_degree_fit.csv';
 
 const bodyMargins = 16;
 
