@@ -1,6 +1,8 @@
 # Visualizing Institutional Scholar Relationships (VISR)
 Data and Visual Analytics Project
 
+View the project live at https://karankishinani.github.io/VISR/ (Note it will take some time to download and load the data files)
+
 All the code for the project contained in the root directory.
 
 ---------------------------------------------------
