@@ -1,5 +1,5 @@
-const graphFile = 'https://karankishinani.github.io/VISR/viz/data/edgefile.csv';
-const institutionFile = 'https://karankishinani.github.io/VISR/viz/data/labels_clusters.csv';
+const graphFile = 'https://media.githubusercontent.com/media/karankishinani/VISR/master/viz/data/edgefile.csv';
+const institutionFile = 'https://media.githubusercontent.com/media/karankishinani/VISR/master/viz/data/labels_clusters.csv';
 const fosFile = 'https://karankishinani.github.io/VISR/viz/data/fos_table.csv';
 const fosSizeFile = 'https://karankishinani.github.io/VISR/viz/data/weight_degree_fit.csv';
 
