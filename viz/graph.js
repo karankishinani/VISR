@@ -333,7 +333,7 @@ function knowledgeGraphRequest(ID, d) {
         document.getElementById(ID).innerHTML =
             (image ? "<img width=\"100px\" src=\"" + image + "\"/>" : "") +
             "<div style=\"float: right; padding-left:5px; padding-right:20px; position:relative; \">" +
-            '<img src="https://karankishinani.github.io/VISR/blob/master/viz/download.png" width="26px" style="position:absolute; top:-13px; right:-13px;" onclick="tip.hide()" </img>' +
+            '<img src="https://karankishinani.github.io/VISR/viz/download.png" width="26px" style="position:absolute; top:-13px; right:-13px;" onclick="tip.hide()" </img>' +
             "<b>" + name + "</b><br />" +
             (desc ? "<br />" + desc : "") +
             (url ? "<br /><a href="  +url + " target=\"_blank\">Homepage</ a></br>" : "") +
