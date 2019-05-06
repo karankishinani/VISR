@@ -1,7 +1,7 @@
 const graphFile = 'https://media.githubusercontent.com/media/karankishinani/VISR/master/viz/data/edgefile.csv';
 const institutionFile = 'https://media.githubusercontent.com/media/karankishinani/VISR/master/viz/data/labels_clusters.csv';
-const fosFile = 'https://karankishinani.github.io/VISR/viz/data/fos_table.csv';
-const fosSizeFile = 'https://karankishinani.github.io/VISR/viz/data/weight_degree_fit.csv';
+const fosFile = 'https://media.githubusercontent.com/media/karankishinani/VISR/master/viz/data/fos_table.csv';
+const fosSizeFile = 'https://media.githubusercontent.com/media/karankishinani/VISR/master/viz/data/weight_degree_fit.csv';
 
 const bodyMargins = 16;
 
