@@ -1,14 +1,3 @@
-id,label
-1,medicine
-2,biology
-3,physics
-4,chemistry
-5,engineering
-6,computer science
-7,psychology
-8,mathematics
-9,social science
-10,environmental science
-11,materials science
-12,business
-13,humanities
+version https://git-lfs.github.com/spec/v1
+oid sha256:85af22cf919633dfc4101907d04d951f33df1abc62af8b4daa8ec795c253daad
+size 201

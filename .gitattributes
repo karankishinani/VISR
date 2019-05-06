@@ -1,3 +1,4 @@
 viz/data/ filter=lfs diff=lfs merge=lfs -text
 viz/data/edgefile.csv filter=lfs diff=lfs merge=lfs -text
 viz/data/labels_clusters.csv filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
