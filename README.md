@@ -85,3 +85,5 @@ Steps:
 3. Field names are converted to ID values specified ub FOSIDMAP.txt via bash script replace.sh
 
 This output is merged with the institution data and sent to Hadoop MapReduce
+
+![Poster](https://github.com/karankishinani/VISR/blob/master/poster.png)
